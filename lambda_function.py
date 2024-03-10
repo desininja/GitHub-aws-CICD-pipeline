@@ -35,7 +35,7 @@ def lambda_handler(event, context):
         print(delivered_df)
         
         dest_obj_key = object_key[0:10] + '-delivered_orders.json'
-        s3.put_object(Bucket=destination_bucket, Key=dest_obj_key, Body=delivered_df.to_json())
+        s3.put_object(Bucket=destination_bucket, Key=dest_obj_key, Body=delivered_df.to_json(orient='records'))
         
         message = f"Input S3 File {'s3://' + source_bucket + '/' + object_key} has been processed successfully !! and uploaded to the destination bucket {'s3://' + destination_bucket + '/' + dest_obj_key}"
         sns_client.publish(Subject="SUCCESS - Daily DoorDash Data Processing",TargetArn=sns_arn, Message=message, MessageStructure='text')
